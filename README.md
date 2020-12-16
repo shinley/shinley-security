@@ -1,0 +1,5 @@
+- shinley-security: 主模块
+- shinley-security-core: 核心业务逻辑
+- imooc-security-browser: 浏览器安全特定代码
+- imooc-security-app: app相关特定代码
+- imooc-security-demo: 样例程序
