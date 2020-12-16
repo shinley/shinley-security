@@ -22,6 +22,10 @@
         <module>shinley-security-demo</module>
     </modules>
 
+    <properties>
+        <shinley.security.version>1.0-SNAPSHOT</shinley.security.version>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -37,6 +41,14 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>Hoxton.SR8</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.session</groupId>
+                <artifactId>spring-session-bom</artifactId>
+                <version>Corn-SR2</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -12,5 +12,11 @@
 
     <artifactId>shinley-security-demo</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.shinley.security</groupId>
+            <artifactId>shinley-security-browser</artifactId>
+            <version>${shinley.security.version}</version>
+        </dependency>
+    </dependencies>
 </project>
