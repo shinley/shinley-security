@@ -15,6 +15,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.print.attribute.standard.MediaSize;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
@@ -114,6 +116,22 @@ public class UserControllerTest {
         System.out.println(date.getTime());
         String content = "{\"username\":\"tom\", \"password\":null, \"birthday\":"+date.getTime()+"}";
         String result = mockMvc.perform(MockMvcRequestBuilders.post("/user").contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(content))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1")).andReturn().getResponse().getContentAsString();
+        System.out.println(result);
+    }
+
+    /**
+     * RequestBody 传参
+     * 参数 password 不能为空
+     */
+    @Test
+    public void whenUpdateSuccess() throws Exception {
+        Date date = new Date(LocalDateTime.now().plusYears(1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(date.getTime());
+        String content = "{\"id\":\"1\", \"username\":\"tom\", \"password\":null, \"birthday\":"+date.getTime()+"}";
+        String result = mockMvc.perform(MockMvcRequestBuilders.put("/user/1").contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1")).andReturn().getResponse().getContentAsString();
