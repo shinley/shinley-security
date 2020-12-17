@@ -138,5 +138,11 @@ public class UserControllerTest {
         System.out.println(result);
     }
 
+    @Test
+    public void whenDeleteSuccess() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/user/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
 }

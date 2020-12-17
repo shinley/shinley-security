@@ -108,5 +108,13 @@ public class UserController {
         return user;
     }
 
+    /**
+     * 修改用户
+     */
+    @DeleteMapping("/user/{id:\\d+}")
+    public void delete(@PathVariable String id) {
+        System.out.println(id);
+    }
+
 
 }
