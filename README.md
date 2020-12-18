@@ -56,3 +56,12 @@ https://github.com/json-path/JsonPath
 - 过滤器 (Filter)
 - 拦截器 (Interceptor)
 - 切片 (Aspect)
+
+@ControllerAdvice 拦截在 Interceptor 之前
+
+# 文件的上传和下载
+
+# 异步处理REST服务
+- 使用Runnable异步处理rest服务
+- 使用DeferredResult异步处理Rest服务
+- 异步处理配置

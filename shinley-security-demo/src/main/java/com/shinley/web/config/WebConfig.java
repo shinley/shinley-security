@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -33,4 +34,15 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(timeInterceptor);
     }
+
+    /**
+     * 支持主线程开启副线程
+     * @param configurer
+     */
+//    @Override
+//    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+//        configurer.
+//        configurer.setDefaultTimeout();
+//        configurer.setTaskExecutor();
+//    }
 }
