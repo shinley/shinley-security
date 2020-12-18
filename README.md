@@ -47,3 +47,12 @@ https://github.com/json-path/JsonPath
     - Min(value=) 值必须大于等于value指定的值， 不能注解在字符串类型的属性上
 - 自定义消息
 - 自定义校验注解
+
+# Restful API错误处理
+- Spring Boot 中默认的错误处理机制
+- 自定义异常处理
+
+# RESTful API的拦截
+- 过滤器 (Filter)
+- 拦截器 (Interceptor)
+- 切片 (Aspect)
