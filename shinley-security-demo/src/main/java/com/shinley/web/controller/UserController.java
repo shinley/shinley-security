@@ -7,6 +7,10 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,14 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
+    @GetMapping("/me")
+    public Object getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+//    public Object getCurrentUser(Authentication authentication) {
+//        return SecurityContextHolder.getContext().getAuthentication();
+//        return authentication;
+        return userDetails;
+    }
 
     /**
      * JsonView 定义返回的视图

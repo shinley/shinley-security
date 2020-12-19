@@ -1,67 +1,40 @@
-- shinley-security: 主模块
-- shinley-security-core: 核心业务逻辑
-- imooc-security-browser: 浏览器安全特定代码
-- imooc-security-app: app相关特定代码
-- imooc-security-demo: 样例程序
+# SpringSecurity开发基于表单的认证
+### SpringSecurity基本原理
 
+- UsernamePasswordAuthenticationFilter 表单认证过滤器
+- BasicAuthentictionFilter  基本认证过滤器
+- 。。。
+- ExceptionTranslationFilter
+- FilterSecurityIntercepter
 
-# jsonPath 的github地址
-https://github.com/json-path/JsonPath
+### 处定义用户认证逻辑
+- 处理用户信息获取逻辑 UserDetailService
+- 处理用户校验逻辑  UserDetails
+- 处理密码加密解密  PasswordEncoder
 
-# JsonView 使用步骤
+### 个性化用户认证流程
+- 自定义登录页面      http.formLogin().loginPage("/imooc-signIn.html")
+- 自定义登录成功处理   AuthenticationSuccessHandler
+- 自定义登录失败处理   AuthenticationFailureHandler
 
-- 使用接口来声明多个视图
-- 在值对象的get方法上指定视图
-- 在Controller方法上指定视图
- 
-# 处理创建请求
-- @RequestBody 映射请求到java方法的参数
-- 日期类型参数的处理
-    1. 不要传带格式的时间格式， 只传时间戳
-    
-- @Valid注解和BindingResult验证请求参数的合法性并处理校验结果
+#### 处理不同类型 的请法庭
 
+接到html 请求或数据请求
 
-# 开发用户信息修改和删除服务
-- 常用的验证注解
-    - @NotNull 值不能为空
-    - @Null 值必须为空
-    - @Pattern(regex=) 字符串必须匹配正则表达式
-    - @Size(min=, max=) 集合的元素数量必须在min和max之间
-    - CreditCardNumber(ignoreNonDigitCharacters=)
-    - @Email 字符串必须是Email地址
-    - @Length(min=, max=) 检查字符串的长度
-    - @NotBlank 字符串必须有字符
-    - @NotEmpte 不符串不为null, 集合有元素
-    - @Range(min=, max=) 数字必须大于等min, 小于等于max
-    - @SafeHtml 字符串是安全的html
-    - @URL 字符串是合法的URL
-    - @AssertFalse 值必须是false
-    - @AssertTrue 值必须是true
-    - @DecimalMax(value=, inclusive=) 值必须小于等于(inclusive=true)/小于（inclusive=false）value属性指定的值 。可注解在字符串类型的属性上。
-    - @DecimalMin(value=, inclusive) 值 必须大于等于（inclusive=true)/大于（inclusive=false）value属性指定的值 。可以注解在字符串类型的属性上。
-    - @Digits(integer=, fraction=) 数字格式检查， integer指定整数部分的最大长度， fraction指定小数部分的最大长度
-    - @Future 值必须是未来的日期。
-    - @Past 值必须是过去的日期。
-    - Max(value=) 值必须小于等于value指定的值 ， 不能注解在字符串类型型的属性上
-    - Min(value=) 值必须大于等于value指定的值， 不能注解在字符串类型的属性上
-- 自定义消息
-- 自定义校验注解
+是否需要身份认证
 
-# Restful API错误处理
-- Spring Boot 中默认的错误处理机制
-- 自定义异常处理
+跳转到一个自定义Controller方法上
 
-# RESTful API的拦截
-- 过滤器 (Filter)
-- 拦截器 (Interceptor)
-- 切片 (Aspect)
+在方法内判断
 
-@ControllerAdvice 拦截在 Interceptor 之前
+是否是html请求引发的跳转
 
-# 文件的上传和下载
+是=》返回登录页面
 
-# 异步处理REST服务
-- 使用Runnable异步处理rest服务
-- 使用DeferredResult异步处理Rest服务
-- 异步处理配置
+否=》返回401状态码和错误信息
+
+### 认证流程源码级详解
+- 认证处理流程说明
+- 认证结果如何在多个请求之间共享
+- 获取认证用户信息
+

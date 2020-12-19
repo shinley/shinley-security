@@ -9,3 +9,10 @@ spring:
     user:
       name: shinley
       password: 123456
+
+# 如果不配置 ，要跳转到默认的登录页， 配置之后， 要跳转到此处配置的页面
+shinley:
+  security:
+    browser:
+      loginPage: /demo-signIn.html
+      loginType: REDIRECT
