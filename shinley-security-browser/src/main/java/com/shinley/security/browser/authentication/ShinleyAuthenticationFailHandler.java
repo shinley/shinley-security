@@ -1,6 +1,7 @@
 package com.shinley.security.browser.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.shinley.security.browser.support.SimpleResponse;
 import com.shinley.security.core.properties.LoginType;
 import com.shinley.security.core.properties.SecurityPerties;
 import org.slf4j.Logger;
@@ -38,7 +39,8 @@ public class ShinleyAuthenticationFailHandler extends SimpleUrlAuthenticationFai
         if (LoginType.JSON.equals(securityPerties.getBrowser().getLoginType())) {
             response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.getWriter().write(objectMapper.writeValueAsString(exception));
+//            response.getWriter().write(objectMapper.writeValueAsString(exception));
+            response.getWriter().write(objectMapper.writeValueAsString(new SimpleResponse(exception.getMessage())));
         } else {
             super.onAuthenticationFailure(request, response, exception);
         }

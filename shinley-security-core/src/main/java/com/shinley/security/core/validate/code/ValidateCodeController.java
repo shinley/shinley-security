@@ -16,7 +16,8 @@ import java.util.Random;
 
 @RestController
 public class ValidateCodeController {
-    private static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
+
+    public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
 
     /**
      * 原来是spring-social-web中的包， 现在spring-web-social包不推荐使用了
