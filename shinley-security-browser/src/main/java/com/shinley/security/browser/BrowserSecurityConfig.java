@@ -32,13 +32,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 //        http.httpBasic()
         http.formLogin()
-                .loginPage("/shinley-signIn.html")
+                .loginPage(securityPerties.getBrowser().getLoginPage())
                 .loginProcessingUrl("/authentication/form")
                 .successHandler(shinleyAuthenticationSuccessHandler)
                 .failureHandler(shinleyAuthenticationFailHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage()).permitAll()
+                .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage(), "/code/image").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and().csrf().disable();

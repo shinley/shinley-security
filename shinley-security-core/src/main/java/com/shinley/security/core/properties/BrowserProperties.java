@@ -1,6 +1,7 @@
 package com.shinley.security.core.properties;
 
 public class BrowserProperties {
+
     private String loginPage = "/shinley-signIn.html";
 
     private LoginType loginType = LoginType.JSON;
