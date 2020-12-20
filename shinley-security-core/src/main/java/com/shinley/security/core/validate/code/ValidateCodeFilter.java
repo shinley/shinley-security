@@ -30,8 +30,8 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                 authenticationFailureHandler.onAuthenticationFailure(request, response, e);
                 return;
             }
-            filterChain.doFilter(request, response);
         }
+        filterChain.doFilter(request, response);
     }
 
     private void validate(ServletWebRequest request) throws ServletRequestBindingException {

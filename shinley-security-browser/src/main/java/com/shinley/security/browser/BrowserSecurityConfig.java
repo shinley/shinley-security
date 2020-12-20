@@ -39,9 +39,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(shinleyAuthenticationFailHandler);
 
-//        http.httpBasic()
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-            .formLogin()
+//      http.httpBasic()
+
+        http.formLogin()
             .loginPage(securityPerties.getBrowser().getLoginPage())
             .loginProcessingUrl("/authentication/form")
             .successHandler(shinleyAuthenticationSuccessHandler)
@@ -52,6 +52,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
             .anyRequest()
             .authenticated()
             .and().csrf().disable();
+
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class);
 }
 
     /**
