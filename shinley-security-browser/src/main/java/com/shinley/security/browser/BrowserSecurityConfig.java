@@ -3,7 +3,6 @@ package com.shinley.security.browser;
 import com.shinley.security.browser.authentication.ShinleyAuthenticationFailHandler;
 import com.shinley.security.browser.authentication.ShinleyAuthenticationSuccessHandler;
 import com.shinley.security.core.properties.SecurityPerties;
-import com.shinley.security.core.validate.code.ValidateCodeController;
 import com.shinley.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,18 +41,18 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
 //        http.httpBasic()
         http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                .loginPage(securityPerties.getBrowser().getLoginPage())
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(shinleyAuthenticationSuccessHandler)
-                .failureHandler(shinleyAuthenticationFailHandler)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage(), "/code/image").permitAll()
-                .anyRequest()
-                .authenticated()
-                .and().csrf().disable();
-    }
+            .formLogin()
+            .loginPage(securityPerties.getBrowser().getLoginPage())
+            .loginProcessingUrl("/authentication/form")
+            .successHandler(shinleyAuthenticationSuccessHandler)
+            .failureHandler(shinleyAuthenticationFailHandler)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage(), "/code/image").permitAll()
+            .anyRequest()
+            .authenticated()
+            .and().csrf().disable();
+}
 
     /**
      * 密码加密 和 比较密码
