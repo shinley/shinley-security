@@ -1,6 +1,7 @@
 package com.shinley.security.core.validate.code;
 
 import com.shinley.security.core.properties.SecurityPerties;
+import com.shinley.security.core.validate.code.image.ImageCodeGenerator;
 import com.shinley.security.core.validate.code.sms.DefaultSmsCodeSender;
 import com.shinley.security.core.validate.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,7 @@ public class ValidateCodeBeanConfig {
 
 
     @Bean
-    @ConditionalOnMissingBean(ValidateCodeGenerator.class)
-//    @ConditionalOnMissingBean(name = "imageCodeGenerator")
+    @ConditionalOnMissingBean(name = "imageCodeGenerator")
     public ValidateCodeGenerator imageCodeGenerator() {
         ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
         codeGenerator.setSecurityPerties(securityPerties);
@@ -25,9 +25,8 @@ public class ValidateCodeBeanConfig {
     }
 
     @Bean
-//    @ConditionalOnMissingBean(name = "smsCodeGenerator")
     @ConditionalOnMissingBean(SmsCodeSender.class)
-    public SmsCodeSender smsCodeGenerator() {
+    public SmsCodeSender smsCodeSender() {
         return new DefaultSmsCodeSender();
     }
 }

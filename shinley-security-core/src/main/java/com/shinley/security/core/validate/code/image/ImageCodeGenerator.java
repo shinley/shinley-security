@@ -1,20 +1,26 @@
-package com.shinley.security.core.validate.code;
+package com.shinley.security.core.validate.code.image;
 
 import com.shinley.security.core.properties.SecurityPerties;
+import com.shinley.security.core.validate.code.ValidateCodeGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
-public class ImageCodeGenerator implements  ValidateCodeGenerator {
+@Component
+public class ImageCodeGenerator implements ValidateCodeGenerator {
 
+    @Autowired
     private SecurityPerties securityPerties;
 
     @Override
-    public ImageCode gengrate(HttpServletRequest request) {
+    public ImageCode gengrate(ServletWebRequest servletWebRequest) {
+        HttpServletRequest request = servletWebRequest.getRequest();
         int width = ServletRequestUtils.getIntParameter(request,  "width", securityPerties.getCode().getImage().getWidth());
         int height = ServletRequestUtils.getIntParameter(request,  "height", securityPerties.getCode().getImage().getHeight());
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

@@ -1,4 +1,6 @@
-package com.shinley.security.core.validate.code;
+package com.shinley.security.core.validate.code.image;
+
+import com.shinley.security.core.validate.code.ValidateCode;
 
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
