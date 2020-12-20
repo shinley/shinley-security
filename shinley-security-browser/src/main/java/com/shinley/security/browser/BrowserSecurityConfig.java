@@ -9,9 +9,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -30,6 +35,21 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private ShinleyAuthenticationFailHandler shinleyAuthenticationFailHandler;
 
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+//        tokenRepository.setCreateTableOnStartup(true);
+
+        return tokenRepository;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -38,15 +58,22 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
          */
         ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
         validateCodeFilter.setAuthenticationFailureHandler(shinleyAuthenticationFailHandler);
+        validateCodeFilter.setSecurityPerties(securityPerties);
+        validateCodeFilter.afterPropertiesSet();
 
 //      http.httpBasic()
 
         http.formLogin()
-            .loginPage(securityPerties.getBrowser().getLoginPage())
-            .loginProcessingUrl("/authentication/form")
-            .successHandler(shinleyAuthenticationSuccessHandler)
-            .failureHandler(shinleyAuthenticationFailHandler)
-            .and()
+                .loginPage(securityPerties.getBrowser().getLoginPage())
+                .loginProcessingUrl("/authentication/form")
+                .successHandler(shinleyAuthenticationSuccessHandler)
+                .failureHandler(shinleyAuthenticationFailHandler)
+                .and()
+            .rememberMe()
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(securityPerties.getBrowser().getRememberMeSeconds())
+                .userDetailsService(userDetailsService)
+                .and()
             .authorizeRequests()
             .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage(), "/code/image").permitAll()
             .anyRequest()

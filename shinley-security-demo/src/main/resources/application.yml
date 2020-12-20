@@ -11,8 +11,13 @@ spring:
       password: 123456
 
 # 如果不配置 ，要跳转到默认的登录页， 配置之后， 要跳转到此处配置的页面
-#shinley:
-#  security:
+shinley:
+  security:
+    code:
+      image:
+        length: 6
+        width: 100
+        url: /user, /usr/*
 #    browser:
 #      loginPage: /demo-signIn.html
 #      loginType: REDIRECT
