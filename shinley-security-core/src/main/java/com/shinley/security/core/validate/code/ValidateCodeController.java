@@ -13,8 +13,6 @@ import java.util.Map;
 @RestController
 public class ValidateCodeController {
 
-    public static final String SESSION_KEY = "SESSION_KEY_IMAGE_CODE";
-
     @Autowired
     private Map<String, ValidateCodeProcessor> validateCodeProcessors;
 

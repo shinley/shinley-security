@@ -17,7 +17,9 @@ shinley:
       image:
         length: 6
         width: 100
-        url: /user, /usr/*
+        url: /user, /user/*
+      sms:
+        url: /user, /user/*
 #    browser:
 #      loginPage: /demo-signIn.html
 #      loginType: REDIRECT

@@ -2,6 +2,8 @@ package com.shinley.security.browser;
 
 import com.shinley.security.browser.authentication.ShinleyAuthenticationFailHandler;
 import com.shinley.security.browser.authentication.ShinleyAuthenticationSuccessHandler;
+import com.shinley.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.shinley.security.core.authentication.mobile.SmsCodeFilter;
 import com.shinley.security.core.properties.SecurityPerties;
 import com.shinley.security.core.validate.code.ValidateCodeFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
         JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
@@ -61,9 +66,17 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
         validateCodeFilter.setSecurityPerties(securityPerties);
         validateCodeFilter.afterPropertiesSet();
 
-//      http.httpBasic()
+        /**
+         * 处理短信验证码过滤器
+         */
+        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
+        smsCodeFilter.setAuthenticationFailureHandler(shinleyAuthenticationFailHandler);
+        smsCodeFilter.setSecurityPerties(securityPerties);
+        smsCodeFilter.afterPropertiesSet();
 
-        http.formLogin()
+        http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
+            .formLogin()
                 .loginPage(securityPerties.getBrowser().getLoginPage())
                 .loginProcessingUrl("/authentication/form")
                 .successHandler(shinleyAuthenticationSuccessHandler)
@@ -78,9 +91,8 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage(), "/code/*").permitAll()
             .anyRequest()
             .authenticated()
-            .and().csrf().disable();
-
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class);
+            .and().csrf().disable()
+        .apply(smsCodeAuthenticationSecurityConfig);
 }
 
     /**
