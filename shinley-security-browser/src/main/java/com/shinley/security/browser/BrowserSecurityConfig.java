@@ -68,8 +68,8 @@ public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
             .authorizeRequests()
                 .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
                     SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
-                    securityPerties.getBrowser().getLoginPage(), "/code/*")
-                    .permitAll()
+                    securityPerties.getBrowser().getLoginPage())
+                    .permitAll().antMatchers("/code/**", "/hello").permitAll()
             .anyRequest()
             .authenticated()
             .and().csrf().disable();
