@@ -2,10 +2,13 @@ package com.shinley.security.browser;
 
 import com.shinley.security.browser.authentication.ShinleyAuthenticationFailHandler;
 import com.shinley.security.browser.authentication.ShinleyAuthenticationSuccessHandler;
+import com.shinley.security.core.authentication.AbstractChannelSecurityConfig;
 import com.shinley.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
 import com.shinley.security.core.authentication.mobile.SmsCodeFilter;
+import com.shinley.security.core.properties.SecurityConstants;
 import com.shinley.security.core.properties.SecurityPerties;
 import com.shinley.security.core.validate.code.ValidateCodeFilter;
+import com.shinley.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,21 +24,10 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import javax.sql.DataSource;
 
 @Configuration
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
 
     @Autowired
     private SecurityPerties securityPerties;
-    /**
-     * 登录成功处理器
-     */
-    @Autowired
-    private ShinleyAuthenticationSuccessHandler shinleyAuthenticationSuccessHandler;
-
-    /**
-     * 登录失败处理器
-     */
-    @Autowired
-    private ShinleyAuthenticationFailHandler shinleyAuthenticationFailHandler;
 
     @Autowired
     private DataSource dataSource;
@@ -45,6 +37,10 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository() {
@@ -58,29 +54,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        /**
-         * 处理验证码过滤器
-         */
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(shinleyAuthenticationFailHandler);
-        validateCodeFilter.setSecurityPerties(securityPerties);
-        validateCodeFilter.afterPropertiesSet();
+        applyPasswordAuthenticationConfig(http);
 
-        /**
-         * 处理短信验证码过滤器
-         */
-        SmsCodeFilter smsCodeFilter = new SmsCodeFilter();
-        smsCodeFilter.setAuthenticationFailureHandler(shinleyAuthenticationFailHandler);
-        smsCodeFilter.setSecurityPerties(securityPerties);
-        smsCodeFilter.afterPropertiesSet();
-
-        http.addFilterBefore(smsCodeFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-            .formLogin()
-                .loginPage(securityPerties.getBrowser().getLoginPage())
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(shinleyAuthenticationSuccessHandler)
-                .failureHandler(shinleyAuthenticationFailHandler)
+        http.apply(validateCodeSecurityConfig)
+                .and()
+            .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
             .rememberMe()
                 .tokenRepository(persistentTokenRepository())
@@ -88,11 +66,13 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService)
                 .and()
             .authorizeRequests()
-            .antMatchers("/authentication/require", securityPerties.getBrowser().getLoginPage(), "/code/*").permitAll()
+                .antMatchers(SecurityConstants.DEFAULT_UNAUTHENTICATION_URL,
+                    SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                    securityPerties.getBrowser().getLoginPage(), "/code/*")
+                    .permitAll()
             .anyRequest()
             .authenticated()
-            .and().csrf().disable()
-        .apply(smsCodeAuthenticationSecurityConfig);
+            .and().csrf().disable();
 }
 
     /**

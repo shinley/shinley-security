@@ -1,13 +1,15 @@
-package com.shinley.security.core.validate.code;
+package com.shinley.security.core.validate.code.sms;
 
 import com.shinley.security.core.properties.SecurityPerties;
+import com.shinley.security.core.validate.code.ValidateCode;
+import com.shinley.security.core.validate.code.ValidateCodeGenerator;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
 @Component("smsCodeGenerator")
-public class SmsCodeGenerator implements  ValidateCodeGenerator {
+public class SmsCodeGenerator implements ValidateCodeGenerator {
 
     @Autowired
     private SecurityPerties securityPerties;

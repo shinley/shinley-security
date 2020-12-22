@@ -1,8 +1,8 @@
 package com.shinley.security.core.authentication.mobile;
 
+import com.shinley.security.core.properties.SecurityConstants;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -16,7 +16,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
     // ~ Static fields/initializers
     // =====================================================================================
 
-    public static final String SHINLEY_FORM_MOBILE_KEY = "mobile";
+    public static final String SHINLEY_FORM_MOBILE_KEY = SecurityConstants.DEFAULT_PARAMETER_NAME_MOBILE;
 
     private String mobileParameter = SHINLEY_FORM_MOBILE_KEY;
     private boolean postOnly = true;
@@ -25,7 +25,7 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
     // ===================================================================================================
 
     public SmsCodeAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/authentication/mobile", "POST"));
+        super(new AntPathRequestMatcher(SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE, "POST"));
     }
 
     // ~ Methods
